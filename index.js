@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 // Middleware
-app.use(cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 }));
+app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(express.json());
 
 //token verification
@@ -172,7 +172,7 @@ const dbConnect = async () => {
       const totalProducts = await productCollection.countDocuments({ query });
       const brands = [...new Set(productInfo.map((p) => p.brand))];
       const categories = [...new Set(productInfo.map((p) => p.category))];
-      console.log(name);
+
       res.send(result);
     });
     //qnique category of products
