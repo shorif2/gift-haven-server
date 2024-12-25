@@ -59,7 +59,7 @@ const productCollection = client.db("giftHaven").collection("products");
 // db connect
 const dbConnect = async () => {
   try {
-    await client.connect();
+    client.connect();
     console.log("MongoDB connected succesfully!!");
 
     //insert user to database
