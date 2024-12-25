@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(express.json());
-
+//token
 //token verification
 const verifyJWT = (req, res, next) => {
   const authorization = req.headers.authorization;
