@@ -151,7 +151,7 @@ const dbConnect = async () => {
       res.send(result);
     });
 
-    //get single prouct
+    //get single product
     app.get("/single-product", async (req, res) => {
       const { id } = req.query;
       const product = await productCollection.findOne(new ObjectId(id));
