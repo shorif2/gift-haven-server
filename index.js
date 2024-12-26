@@ -43,6 +43,17 @@ const verifySeller = async (req, res, next) => {
   }
   next();
 };
+//verify admin
+const verifyAdmin = async (req, res, next) => {
+  const email = req.decoded.email;
+  const query = { email: email };
+  const user = await userCollection.findOne(query);
+
+  if (user?.role !== "admin") {
+    return res.send({ message: "Forbidden access" });
+  }
+  next();
+};
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.shfwl8n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -82,9 +93,9 @@ const dbConnect = async () => {
       const user = await userCollection.findOne(query);
       res.send(user);
     });
-
+    //verifyJWT, verifyAdmin,
     //get all user
-    app.get("/all-users", async (req, res) => {
+    app.get("/all-users", verifyJWT, verifyAdmin, async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
     });
