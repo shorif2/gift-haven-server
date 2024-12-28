@@ -233,27 +233,34 @@ const dbConnect = async () => {
 
     // cart list
     app.get("/cart-list", async (req, res) => {
-      const { productIds } = req.query;
-      if (!productIds) {
-        return;
-      }
-      const cartIdes = JSON.parse(productIds);
-      const objectIds = cartIdes?.map((id) => new ObjectId(id));
+      const { userId } = req.query;
+      const user = await userCollection.findOne(
+        {
+          _id: new ObjectId(userId),
+        },
+        { projection: { cart: 1 } }
+      );
+
       const productList = await productCollection
-        .find({ _id: { $in: objectIds } })
+        .find({ _id: { $in: user?.cart } })
         .toArray();
-      res.send(productList);
+      const totalPrice = productList.reduce((accumulator, product) => {
+        return accumulator + product.price; // Accumulate the total price
+      }, 0);
+      console.log(totalPrice);
+      res.send({ products: productList, totalPrice });
     });
     //wishlist
     app.get("/wishlist-list", async (req, res) => {
-      const { productIds } = req.query;
-      if (!productIds) {
-        return;
-      }
-      const cartIdes = JSON.parse(productIds);
-      const objectIds = cartIdes?.map((id) => new ObjectId(id));
+      const { userId } = req.query;
+      const user = await userCollection.findOne(
+        {
+          _id: new ObjectId(userId),
+        },
+        { projection: { wishlist: 1 } }
+      );
       const productList = await productCollection
-        .find({ _id: { $in: objectIds } })
+        .find({ _id: { $in: user?.wishlist } })
         .toArray();
 
       res.send(productList);
